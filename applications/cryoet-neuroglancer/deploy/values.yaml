@@ -1,0 +1,7 @@
+harness:
+  dependencies:
+    build: [cloudharness-frontend-build]
+  deployment: {auto: true, port: 80}
+  secured: false
+  service: {auto: true, port: 80}
+  subdomain: www
