@@ -1,8 +1,7 @@
-import { useEffect, useRef } from 'react';
-import { encodeState, parseState } from './utils';
-import { toggleLayersVisibility } from './services/layers';
-import './App.css';
-
+import { useEffect, useRef } from "react";
+import { encodeState, parseState } from "./utils";
+import { toggleLayersVisibility } from "./services/layers";
+import "./App.css";
 
 const Main = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -17,8 +16,8 @@ const Main = () => {
     if (iframe) {
       const handleHashChange = () => {
         iframe.contentWindow?.postMessage(
-          { type: 'hashchange', hash: window.location.hash },
-          '*'
+          { type: "hashchange", hash: window.location.hash },
+          "*",
         );
       };
 
@@ -27,21 +26,21 @@ const Main = () => {
           return;
         }
         const { type, hash } = event.data;
-        if (type === 'synchash' && window.location.hash !== hash) {
-          history.replaceState(null, '', hash);
+        if (type === "synchash" && window.location.hash !== hash) {
+          history.replaceState(null, "", hash);
         }
       };
 
-      window.addEventListener('hashchange', handleHashChange);
-      window.addEventListener('message', handleMessage);
+      window.addEventListener("hashchange", handleHashChange);
+      window.addEventListener("message", handleMessage);
 
       return () => {
-        window.removeEventListener('hashchange', handleHashChange);
-        window.removeEventListener('message', handleMessage);
+        window.removeEventListener("hashchange", handleHashChange);
+        window.removeEventListener("message", handleMessage);
       };
     }
 
-    return () => { };
+    return () => {};
   }, [neuroglancerUrl]);
 
   // Button action for toggling layers visibility
@@ -53,62 +52,36 @@ const Main = () => {
   };
 
   return (
-    <div
-      style={{
-        margin: 0,
-        padding: 0,
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-      }}
-    >
-      <header
-        style={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: '#000',
-          borderBottom: '1px solid #333',
-          boxSizing: 'border-box',
-          flexShrink: 0,
-        }}
-      >
+    <div className="main-container">
+      <header className="main-header">
         <a href={cryoetUrl} target="_blank" rel="noopener noreferrer">
           <button className="cryoet-doc-button">View documentation</button>
         </a>
-        <p style={{ margin: 0, color: "#fff", fontSize: "0.875rem" }}>CryoET data portal neuroglancer</p>
+        <p className="portal-title">CryoET data portal neuroglancer</p>
         <div className="button-group">
-          <button className="toggle-button" onClick={() => { window.location.hash = exampleHash }}>Load example data</button>
-          <button className="toggle-button" onClick={toggleButton}>Toggle layers visibility</button>
+          <button
+            className="toggle-button"
+            onClick={() => {
+              window.location.hash = exampleHash;
+            }}
+          >
+            Load example data
+          </button>
+          <button className="toggle-button" onClick={toggleButton}>
+            Toggle layers visibility
+          </button>
         </div>
       </header>
-      <div
-        style={{
-          height: '90vh',
-          width: '100%',
-          flexGrow: 1,
-          overflow: 'hidden',
-        }}
-      >
+      <div className="iframe-container">
         <iframe
+          className="neuroglancer-iframe"
           ref={iframeRef}
           src={`${neuroglancerUrl}/${window.location.hash}`}
-          style={{
-            width: '100%',
-            height: '100%',
-            border: 'none',
-            display: 'block',
-          }}
           title="Neuroglancer"
         />
       </div>
     </div>
   );
-
-
 };
 
 export default Main;
