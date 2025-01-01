@@ -29,3 +29,7 @@
     background-color: #0033CC;
     cursor: pointer;
 }
+
+.button-group {
+  gap: 2px;
+}

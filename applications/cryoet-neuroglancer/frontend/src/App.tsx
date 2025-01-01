@@ -8,6 +8,7 @@ const Main = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const neuroglancerUrl = import.meta.env.VITE_NEUROGLANCER_URL;
   const cryoetUrl = import.meta.env.VITE_CRYOET_PORTAL_DOC_URL;
+  const exampleHash = import.meta.env.VITE_EXAMPLE_CRYOET_HASH;
 
   // Add event listeners for hash changes and iframe messages
   useEffect(() => {
@@ -79,7 +80,10 @@ const Main = () => {
           <button className="cryoet-doc-button">View documentation</button>
         </a>
         <p style={{ margin: 0, color: "#fff", fontSize: "0.875rem" }}>CryoET data portal neuroglancer</p>
-        <button className="toggle-button" onClick={toggleButton}>Toggle layers visibility</button>
+        <div className="button-group">
+          <button className="toggle-button" onClick={() => { window.location.hash = exampleHash }}>Load example data</button>
+          <button className="toggle-button" onClick={toggleButton}>Toggle layers visibility</button>
+        </div>
       </header>
       <div
         style={{
