@@ -1,4 +1,3 @@
-
 // Helper functions for parsing and encoding state
 export const parseState = (hashState: string) => {
   const decodedHash = decodeURIComponent(hashState.slice(2));
