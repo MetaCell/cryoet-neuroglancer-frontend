@@ -1,0 +1,31 @@
+.cryoet-doc-button {
+    min-height: 2.875rem;
+    background-color: transparent;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.cryoet-doc-button:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.toggle-button {
+    border-radius: 100px;
+    background: #0B68F8;
+    padding: 6px 12px;
+    margin-right: 1rem;
+    border: none;
+    color: #FFF;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.toggle-button:hover {
+    background-color: #0033CC;
+    cursor: pointer;
+}

@@ -1,10 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { encodeState, parseState } from './utils';
 import { toggleLayersVisibility } from './services/layers';
+import './App.css';
+
 
 const Main = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const neuroglancerUrl = import.meta.env.VITE_NEUROGLANCER_URL;
+  const cryoetUrl = import.meta.env.VITE_CRYOET_PORTAL_DOC_URL;
 
   // Add event listeners for hash changes and iframe messages
   useEffect(() => {
@@ -40,8 +43,6 @@ const Main = () => {
     return () => { };
   }, [neuroglancerUrl]);
 
-
-
   // Button action for toggling layers visibility
   const toggleButton = () => {
     const currentHash = window.location.hash;
@@ -64,21 +65,21 @@ const Main = () => {
     >
       <header
         style={{
-          height: '10vh',
           width: '100%',
           display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          backgroundColor: '#f1f1f1',
-          borderBottom: '1px solid #ccc',
+          backgroundColor: '#000',
+          borderBottom: '1px solid #333',
           boxSizing: 'border-box',
           flexShrink: 0,
         }}
       >
-        <h1 style={{ margin: 0 }}>Neuroglancer</h1>
-        <p style={{ margin: '5px 0' }}>Neuroglancer is loaded in an iframe below</p>
-        <button onClick={toggleButton}>Toggle layers visibility</button>
+        <a href={cryoetUrl} target="_blank" rel="noopener noreferrer">
+          <button className="cryoet-doc-button">View documentation</button>
+        </a>
+        <p style={{ margin: 0, color: "#fff", fontSize: "0.875rem" }}>CryoET data portal neuroglancer</p>
+        <button className="toggle-button" onClick={toggleButton}>Toggle layers visibility</button>
       </header>
       <div
         style={{
