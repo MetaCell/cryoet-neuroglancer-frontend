@@ -51,56 +51,21 @@ const Main = () => {
   };
 
   return (
-    <div
-      style={{
-        margin: 0,
-        padding: 0,
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
-      <header
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: "#000",
-          borderBottom: "1px solid #333",
-          boxSizing: "border-box",
-          flexShrink: 0,
-        }}
-      >
+    <div className="main-container">
+      <header className="main-header">
         <a href={cryoetUrl} target="_blank" rel="noopener noreferrer">
           <button className="cryoet-doc-button">View documentation</button>
         </a>
-        <p style={{ margin: 0, color: "#fff", fontSize: "0.875rem" }}>
-          CryoET data portal neuroglancer
-        </p>
+        <p className="portal-title">CryoET data portal neuroglancer</p>
         <button className="toggle-button" onClick={toggleButton}>
           Toggle layers visibility
         </button>
       </header>
-      <div
-        style={{
-          height: "90vh",
-          width: "100%",
-          flexGrow: 1,
-          overflow: "hidden",
-        }}
-      >
+      <div className="iframe-container">
         <iframe
+          className="neuroglancer-iframe"
           ref={iframeRef}
           src={`${neuroglancerUrl}/${window.location.hash}`}
-          style={{
-            width: "100%",
-            height: "100%",
-            border: "none",
-            display: "block",
-          }}
           title="Neuroglancer"
         />
       </div>
