@@ -55,11 +55,17 @@
   cursor: pointer;
 }
 
+.button-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-right: 1rem;
+}
+
 .toggle-button {
   border-radius: 100px;
   background: #0b68f8;
   padding: 6px 12px;
-  margin-right: 1rem;
   border: none;
   color: #fff;
   font-size: 13px;
@@ -69,8 +75,4 @@
 .toggle-button:hover {
   background-color: #0033cc;
   cursor: pointer;
-}
-
-.button-group {
-  gap: 2px;
 }
