@@ -11,7 +11,8 @@
     "start": "DOMAIN=http://localhost:5000 vite",
     "start:dev": "DOMAIN=https://test.ch.metacell.us vite",
     "start:local": "DOMAIN=http://samples.ch vite",
-    "prebuild": "eslint ."
+    "prebuild": "eslint .",
+    "format": "prettier --cache -w -l ."
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -28,6 +29,7 @@
     "globals": "^15.12.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.15.0",
-    "vite": "^6.0.1"
+    "vite": "^6.0.1",
+    "prettier": "3.4.2"
   }
 }
