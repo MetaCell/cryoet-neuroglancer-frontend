@@ -1,15 +1,23 @@
 import pako from "pako";
 
+function hash2jsonString(hash: string): string {
+  if (hash.startsWith("#!")) {
+    return hash.slice(2);
+  }
+  return hash;
+}
+
 // Helper functions for parsing and encoding state
 export const parseState = (hashState: string) => {
-  const decodedHash = decodeURIComponent(hashState.slice(2));
-  return JSON.parse(decodedHash);
+  const hash = decompressHash(hash2jsonString(hashState));
+  const decodedHash = decodeURIComponent(hash);
+  return JSON.parse(hash2jsonString(decodedHash));
 };
 
 export const encodeState = (jsonObject: any) => {
   const jsonString = JSON.stringify(jsonObject);
   const encodedString = encodeURIComponent(jsonString);
-  return `#!${encodedString}`;
+  return compressHash(encodedString);
 };
 
 // Helper functions for parsing, compressing and decompressing hash
@@ -37,8 +45,8 @@ export function compressHash(hash: string): string {
   if (hashIsCompressed(hash)) {
     return hash;
   }
-  const gzipContext = pako.gzip(hash);
-  const base64UrlFragment = btoa(String.fromCharCode.apply(null, gzipContext));
+  const gzipHash = pako.gzip(hash2jsonString(hash));
+  const base64UrlFragment = btoa(String.fromCharCode.apply(null, gzipHash));
   const newHash = `#!${b64Tob64Url(base64UrlFragment)}`;
   return newHash;
 }
@@ -47,14 +55,8 @@ export function decompressHash(hash: string): string {
   if (hashIsUncompressed(hash)) {
     return hash;
   }
-  let adjustedHash = hash;
-  if (adjustedHash.startsWith("#!")) {
-    adjustedHash = adjustedHash.slice(2);
-  }
-  const base64Context = b64UrlTo64(adjustedHash);
-  const gzipedContext = Uint8Array.from(atob(base64Context), (c) =>
-    c.charCodeAt(0),
-  );
-  const serializedContext = pako.ungzip(gzipedContext);
-  return new TextDecoder().decode(serializedContext);
+  const base64Hash = b64UrlTo64(hash2jsonString(hash));
+  const gzipedHash = Uint8Array.from(atob(base64Hash), (c) => c.charCodeAt(0));
+  const hashFragment = new TextDecoder().decode(pako.ungzip(gzipedHash));
+  return `#!${hashFragment}`;
 }
