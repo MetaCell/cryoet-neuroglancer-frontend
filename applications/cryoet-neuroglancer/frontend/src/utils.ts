@@ -8,6 +8,15 @@ function hash2jsonString(hash: string): string {
 }
 
 // Helper functions for parsing and encoding state
+export const currentState = () => {
+  return parseState(window.location.hash);
+};
+
+export const commitState = (state: Record<string, any>) => {
+  const newHash = encodeState(state);
+  window.location.hash = newHash; // This triggers the hashchange listener
+};
+
 export const parseState = (hashState: string) => {
   const hash = decompressHash(hash2jsonString(hashState));
   const decodedHash = decodeURIComponent(hash);
