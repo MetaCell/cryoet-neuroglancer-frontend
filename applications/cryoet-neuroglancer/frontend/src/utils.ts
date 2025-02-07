@@ -4,11 +4,21 @@ export interface SuperState extends Record<string, any> {
   neuroglancer: string;
 }
 
+export interface ResolvedSuperState extends Record<string, any> {
+  neuroglancer: Record<string, any>;
+}
+
 const emptySuperState = (config: string): SuperState => {
   return {
     extra: 44,
     neuroglancer: config.length > 0 ? decompressHash(config) : "",
   };
+};
+
+export const updateState = (onStateChange: (state: ResolvedSuperState) => ResolvedSuperState) => {
+  const state = currentState();
+  const newState = onStateChange(state);
+  commitState(newState);
 };
 
 export const newSuperState = (config: string): SuperState => {
@@ -58,15 +68,15 @@ function hash2jsonString(hash: string): string {
 }
 
 // Helper functions for parsing and encoding state
-export const currentState = () => {
-  const superState = parseState(window.location.hash);
+export const currentState = (hash = window.location.hash) => {
+  const superState = parseState(hash);
   if (superState.neuroglancer) {
     superState.neuroglancer = parseState(superState.neuroglancer);
   }
   return superState;
 };
 
-export const commitState = (state: SuperState) => {
+export const commitState = (state: SuperState | ResolvedSuperState) => {
   state.neuroglancer = encodeState(state.neuroglancer, /* compress = */ false);
   const newHash = encodeState(state);
   window.location.hash = newHash; // This triggers the hashchange listener

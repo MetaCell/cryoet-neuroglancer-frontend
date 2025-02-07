@@ -6,14 +6,17 @@ import {
   SuperState,
   newSuperState,
   updateNeuroglancerConfigInSuperstate,
+  parseState,
+  ResolvedSuperState,
 } from "./utils";
 import "./App.css";
 
 interface NeuroglancerWrapperProps {
-    baseUrl?: string
+    baseUrl?: string,
+    onStateChange?: (state: ResolvedSuperState) => void,
 }
 
-const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_NEUROGLANCER_URL }: NeuroglancerWrapperProps) => {
+const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_NEUROGLANCER_URL, onStateChange }: NeuroglancerWrapperProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const superState = useRef<SuperState>(newSuperState(window.location.hash))
 
@@ -71,6 +74,7 @@ const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_N
           "%",
         );
         history.replaceState(null, "", newHash);
+        onStateChange?.({ ...superState.current, neuroglancer: parseState(superState.current.neuroglancer) })
       }
     };
 
