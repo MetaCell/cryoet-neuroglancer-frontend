@@ -1,5 +1,55 @@
 import pako from "pako";
 
+export interface SuperState extends Record<string, any> {
+  neuroglancer: string;
+}
+
+const emptySuperState = (config: string): SuperState => {
+  return {
+    extra: 44,
+    neuroglancer: config.length > 0 ? decompressHash(config) : "",
+  };
+};
+
+export const newSuperState = (config: string): SuperState => {
+  const state = parseSuperState(config);
+  if (state.neuroglancer) {
+    return state;
+  }
+  return emptySuperState(config);
+};
+
+export const updateNeuroglancerConfigInSuperstate = (
+  superstate: SuperState,
+  neuroglancerHash: string
+): SuperState => {
+  superstate.neuroglancer = neuroglancerHash;
+  return superstate;
+};
+
+export const parseSuperState = (
+  hash: string,
+  previous?: SuperState
+): SuperState => {
+  if (!hash || hash.length === 0) {
+    return emptySuperState("");
+  }
+  const superState = parseState(hash);
+  if (!superState.neuroglancer) {
+    if (previous) {
+      previous.neuroglancer = decompressHash(hash);
+      return previous;
+    }
+    return emptySuperState(hash);
+  }
+  return superState;
+};
+
+export const extractConfigFromSuperState = (hash: string): string => {
+  const superstate = parseState(hash);
+  return superstate.neuroglancer || "";
+};
+
 function hash2jsonString(hash: string): string {
   if (hash.startsWith("#!")) {
     return hash.slice(2);
@@ -9,10 +59,15 @@ function hash2jsonString(hash: string): string {
 
 // Helper functions for parsing and encoding state
 export const currentState = () => {
-  return parseState(window.location.hash);
+  const superState = parseState(window.location.hash);
+  if (superState.neuroglancer) {
+    superState.neuroglancer = parseState(superState.neuroglancer);
+  }
+  return superState;
 };
 
-export const commitState = (state: Record<string, any>) => {
+export const commitState = (state: SuperState) => {
+  state.neuroglancer = encodeState(state.neuroglancer, /* compress = */ false);
   const newHash = encodeState(state);
   window.location.hash = newHash; // This triggers the hashchange listener
 };
@@ -23,10 +78,13 @@ export const parseState = (hashState: string) => {
   return JSON.parse(hash2jsonString(decodedHash));
 };
 
-export const encodeState = (jsonObject: any) => {
+export const encodeState = (jsonObject: any, compress: boolean = true) => {
   const jsonString = JSON.stringify(jsonObject);
   const encodedString = encodeURIComponent(jsonString);
-  return compressHash(encodedString);
+  if (compress) {
+    return compressHash(encodedString);
+  }
+  return `#!${encodedString}`;
 };
 
 // Helper functions for parsing, compressing and decompressing hash
