@@ -8,10 +8,9 @@ import "./App.css";
 
 interface NeuroglancerWrapperProps {
     baseUrl?: string
-    config?: string
 }
 
-const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_NEUROGLANCER_URL, config = '' }: NeuroglancerWrapperProps) => {
+const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_NEUROGLANCER_URL }: NeuroglancerWrapperProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Add event listeners for hash changes and iframe messages
@@ -20,7 +19,6 @@ const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_N
     if (!iframe) {
       return () => {};
     }
-
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hashIsUncompressed(hash)) {
@@ -76,7 +74,7 @@ const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_N
     <iframe
       className="neuroglancer-iframe"
       ref={iframeRef}
-      src={`${neuroglancerUrl}/${decompressHash(window.location.hash)}`} // We need to give an uncompress hash initially
+      src={`${neuroglancerUrl}/${decompressHash(window.location.hash!)}`} // We need to give an uncompress hash initially
       title="Neuroglancer"
     />
   );
