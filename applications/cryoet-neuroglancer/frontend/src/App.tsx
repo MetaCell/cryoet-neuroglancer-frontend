@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import "./App.css";
 import NeuroglancerWrapper from "./NeuroglancerWrapper";
 import { toggleLayersVisibility } from "./services/layers";
-import { commitState, currentState, ResolvedSuperState, updateState } from "./utils";
+import { type ResolvedSuperState, updateState } from "./utils";
 
 
 

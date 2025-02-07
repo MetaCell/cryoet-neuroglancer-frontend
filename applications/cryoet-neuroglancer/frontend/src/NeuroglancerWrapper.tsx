@@ -3,11 +3,11 @@ import {
   hashIsUncompressed,
   parseSuperState,
   encodeState,
-  SuperState,
+  type SuperState,
   newSuperState,
   updateNeuroglancerConfigInSuperstate,
   parseState,
-  ResolvedSuperState,
+  type ResolvedSuperState,
 } from "./utils";
 import "./App.css";
 
