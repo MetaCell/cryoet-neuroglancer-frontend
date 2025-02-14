@@ -16,7 +16,7 @@ interface NeuroglancerWrapperProps {
     onStateChange?: (state: ResolvedSuperState) => void,
 }
 
-const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_NEUROGLANCER_URL, onStateChange }: NeuroglancerWrapperProps) => {
+const NeuroglancerWrapper = ({ onStateChange }: NeuroglancerWrapperProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const superState = useRef<SuperState>(newSuperState(window.location.hash))
 
@@ -54,10 +54,6 @@ const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_N
 
     // iFrame hash -> main window hash sync
     const handleMessage = (event: MessageEvent) => {
-      const url = neuroglancerUrl.endsWith("/") ? neuroglancerUrl.slice(0, -1) : neuroglancerUrl
-      if (event.origin !== url) {
-        return;
-      }
       const { type, hash } = event.data;
       // When we receive a sync from neuroglancer (iFrame), we know it's uncompressed
       if (type === "synchash" && window.location.hash !== hash) {
@@ -85,13 +81,13 @@ const NeuroglancerWrapper = ({ baseUrl: neuroglancerUrl = import.meta.env.VITE_N
       window.removeEventListener("hashchange", handleHashChange);
       window.removeEventListener("message", handleMessage);
     };
-  }, [neuroglancerUrl]);
+  }, [onStateChange]);
 
   return (
     <iframe
       className="neuroglancer-iframe"
       ref={iframeRef}
-      src={`${neuroglancerUrl}/${superState.current.neuroglancer}`} // We need to give an uncompress hash initially
+      src={`neuroglancer.html${superState.current.neuroglancer}`} // We need to give an uncompress hash initially
       title="Neuroglancer"
     />
   );
