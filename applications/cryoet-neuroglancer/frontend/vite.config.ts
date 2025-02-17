@@ -1,5 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
+
 
 // https://vitejs.dev/config/
 export default defineConfig(() => {
@@ -15,8 +17,8 @@ export default defineConfig(() => {
     resolve: {
       // Include only specific data sources.
       conditions: [
-        "neuroglancer/datasource:none_by_default",
-        "neuroglancer/datasource/precomputed:enabled",
+        // "neuroglancer/datasource:none_by_default",
+        // "neuroglancer/datasource/precomputed:enabled",
       ],
     },
     esbuild: {
@@ -30,6 +32,12 @@ export default defineConfig(() => {
     build: {
       // Avoid spurious warnings due to large chunks from Neuroglancer.
       chunkSizeWarningLimit: 2 * 1024 * 1024,
+      rollupOptions: {
+        input: {
+          main: path.resolve(__dirname, "index.html"),
+          neuroglancer: path.resolve(__dirname, "neuroglancer.html"),
+        },
+      },
     },
     optimizeDeps: {
       entries: [
